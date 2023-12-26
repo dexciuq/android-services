@@ -1,4 +1,4 @@
-package com.dexciuq.andorid_services
+package com.dexciuq.android_services
 
 import org.junit.Test
 
