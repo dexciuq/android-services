@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -25,7 +25,8 @@
         </activity>
 
         <service android:name=".MyService" />
-        <service android:name=".MyForegroundService"/>
+        <service android:name=".MyForegroundService" />
+        <service android:name=".MyIntentServiceService" />
     </application>
 
 </manifest>

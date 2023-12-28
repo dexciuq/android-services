@@ -16,17 +16,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.simpleService.setOnClickListener {
-            val intent = MyService.newIntent(this@MainActivity, 25)
+            val intent = MyService.newIntent(this, 25)
             startService(intent)
         }
 
         binding.foregroundService.setOnClickListener {
-            val intent = MyForegroundService.newIntent(this@MainActivity)
+            val intent = MyForegroundService.newIntent(this)
             ContextCompat.startForegroundService(this, intent)
 
             // Example of stop service outside of service
             // val intent = MyForegroundService.newIntent(this)
             // stopService(intent)
+        }
+
+        binding.intentService.setOnClickListener {
+            val intent = MyIntentServiceService.newIntent(this)
+
+            // Can be started as a foreground service or as a regular service
+            // It is up to you
+            ContextCompat.startForegroundService(this, intent)
         }
     }
 }
