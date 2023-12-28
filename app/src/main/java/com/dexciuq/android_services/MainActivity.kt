@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         binding.foregroundService.setOnClickListener {
             val intent = MyForegroundService.newIntent(this@MainActivity)
             ContextCompat.startForegroundService(this, intent)
+
+            // Example of stop service outside of service
+            // val intent = MyForegroundService.newIntent(this)
+            // stopService(intent)
         }
     }
 }
