@@ -22,13 +22,15 @@ class MyService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.i("onStartCommand")
+        val start = intent?.extras?.getInt(EXTRA_START) ?: 0
         scope.launch {
-            repeat(100) {
+            for (i in start until start + 100) {
                 delay(1000)
-                Timber.i(it.toString())
+                Timber.i(i.toString())
             }
         }
-        return super.onStartCommand(intent, flags, startId)
+        // onStartCommand -> START_STICKY, START_NOT_STICKY, START_REDELIVER_INTENT
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -43,8 +45,12 @@ class MyService : Service() {
     }
 
     companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, MyService::class.java)
+
+        private const val EXTRA_START = "extra_start"
+        fun newIntent(context: Context, start: Int): Intent {
+            return Intent(context, MyService::class.java).apply {
+                putExtra(EXTRA_START, start)
+            }
         }
     }
 }
