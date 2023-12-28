@@ -10,7 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import timber.log.Timber
 
-class MyIntentServiceService : IntentService(NAME) {
+class MyIntentService : IntentService(NAME) {
 
     override fun onCreate() {
         super.onCreate()
@@ -68,7 +68,7 @@ class MyIntentServiceService : IntentService(NAME) {
         private const val CHANNEL_NAME = "Service Notification"
 
         fun newIntent(context: Context): Intent {
-            return Intent(context, MyIntentServiceService::class.java)
+            return Intent(context, MyIntentService::class.java)
         }
     }
 }

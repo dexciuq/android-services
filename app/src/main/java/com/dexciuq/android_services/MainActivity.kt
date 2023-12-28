@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.intentService.setOnClickListener {
-            val intent = MyIntentServiceService.newIntent(this)
+            val intent = MyIntentService.newIntent(this)
 
             // Can be started as a foreground service or as a regular service
             // It is up to you
@@ -56,6 +56,9 @@ class MainActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val intent = MyJobService.newIntent(page++)
                 jobScheduler.enqueue(jobInfo, JobWorkItem(intent))
+            } else {
+                val intent = MyIntentService2.newIntent(this, page++)
+                startService(intent)
             }
         }
     }
