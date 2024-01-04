@@ -1,5 +1,7 @@
 package com.dexciuq.android_services
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.app.job.JobWorkItem
@@ -10,11 +12,13 @@ import android.os.Bundle
 import android.os.IBinder
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import com.dexciuq.android_services.databinding.ActivityMainBinding
 import timber.log.Timber
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
@@ -83,6 +87,26 @@ class MainActivity : AppCompatActivity() {
 
         binding.jobIntentService.setOnClickListener {
             MyJobIntentService.enqueue(this, page++)
+        }
+
+        binding.alarmManager.setOnClickListener {
+            val alarmManager = getSystemService(AlarmManager::class.java)
+
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.SECOND, 10)
+
+            val intent = AlarmReceiver.newIntent(this)
+            val pendingIntent = PendingIntent.getBroadcast(
+                this, 100, intent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+
+            AlarmManagerCompat.setExact(
+                alarmManager,
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
         }
 
         binding.workManager.setOnClickListener {
