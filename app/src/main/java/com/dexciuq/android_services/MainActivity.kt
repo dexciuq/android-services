@@ -4,8 +4,11 @@ import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.app.job.JobWorkItem
 import android.content.ComponentName
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.work.ExistingWorkPolicy
@@ -16,6 +19,20 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = (service as? MyForegroundService.LocalBinder) ?: return
+            val foregroundService = binder.getService()
+            foregroundService.onProgressChanged = {
+                binding.progressBar.progress = it
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            Toast.makeText(this@MainActivity, "Service destroyed", Toast.LENGTH_SHORT).show()
+            binding.progressBar.progress = 0
+        }
+    }
     private var page = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,5 +93,15 @@ class MainActivity : AppCompatActivity() {
                 MyWorker.makeRequest(page++)
             )
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        bindService(MyForegroundService.newIntent(this), serviceConnection, 0)
+    }
+
+    override fun onStop() {
+        unbindService(serviceConnection)
+        super.onStop()
     }
 }

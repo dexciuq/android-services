@@ -8,6 +8,15 @@
     android:paddingHorizontal="16dp"
     tools:context=".MainActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginBottom="16dp" />
+
     <Button
         android:id="@+id/simple_service"
         android:layout_width="match_parent"
@@ -56,4 +65,5 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:text="@string/work_manager" />
+
 </LinearLayout>

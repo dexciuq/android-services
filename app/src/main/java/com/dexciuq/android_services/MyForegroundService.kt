@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
@@ -25,6 +26,8 @@ class MyForegroundService : Service() {
         getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     }
 
+    var onProgressChanged: (Int) -> Unit = {}
+
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
@@ -43,6 +46,7 @@ class MyForegroundService : Service() {
                     .build()
 
                 notificationManager.notify(NOTIFICATION_ID, notification)
+                onProgressChanged(i)
 
                 Timber.i(i.toString())
             }
@@ -54,7 +58,7 @@ class MyForegroundService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         Timber.i("onBind")
-        TODO("Not yet implemented")
+        return LocalBinder()
     }
 
     override fun onDestroy() {
@@ -83,7 +87,12 @@ class MyForegroundService : Service() {
             .setOnlyAlertOnce(true)
     }
 
+    inner class LocalBinder : Binder() {
+        fun getService(): MyForegroundService = this@MyForegroundService
+    }
+
     companion object {
+
         private const val NOTIFICATION_ID = 1
         private const val CHANNEL_ID = "channel_id"
         private const val CHANNEL_NAME = "Service Notification"
